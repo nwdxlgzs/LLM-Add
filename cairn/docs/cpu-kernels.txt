@@ -1,0 +1,25 @@
+single_thread rows=1024 cols=1024 repeats=100 (packed decode cost included)
+backend=scalar    type=f32 GFLOP/s=   1.864 checksum=0.5217752
+backend=scalar    type=fp8 GFLOP/s=   1.283 checksum=0.5239705
+backend=scalar    type=fp4 GFLOP/s=   1.555 checksum=0.5132597
+backend=sse2      type=f32 GFLOP/s=  16.365 checksum=0.5217816
+backend=sse2      type=fp8 GFLOP/s=   2.671 checksum=0.5239681
+backend=sse2      type=fp4 GFLOP/s=   2.749 checksum=0.5132596
+backend=ssse3     type=f32 GFLOP/s=  15.808 checksum=0.5217816
+backend=ssse3     type=fp8 GFLOP/s=   2.886 checksum=0.5239681
+backend=ssse3     type=fp4 GFLOP/s=   3.063 checksum=0.5132596
+backend=sse4.1    type=f32 GFLOP/s=  17.796 checksum=0.5217816
+backend=sse4.1    type=fp8 GFLOP/s=   3.329 checksum=0.5239681
+backend=sse4.1    type=fp4 GFLOP/s=   3.439 checksum=0.5132596
+backend=avx       type=f32 GFLOP/s=  21.758 checksum=0.5217735
+backend=avx       type=fp8 GFLOP/s=   3.034 checksum=0.5239693
+backend=avx       type=fp4 GFLOP/s=   2.725 checksum=0.513262
+backend=avx2      type=f32 GFLOP/s=  21.200 checksum=0.5217735
+backend=avx2      type=fp8 GFLOP/s=   6.169 checksum=0.5239693
+backend=avx2      type=fp4 GFLOP/s=   6.746 checksum=0.513262
+backend=avx2-fma  type=f32 GFLOP/s=  26.361 checksum=0.521776
+backend=avx2-fma  type=fp8 GFLOP/s=   5.833 checksum=0.5239684
+backend=avx2-fma  type=fp4 GFLOP/s=   6.814 checksum=0.5132625
+backend=avx512    type=f32 GFLOP/s=  22.221 checksum=0.5217762
+backend=avx512    type=fp8 GFLOP/s=   8.722 checksum=0.5239703
+backend=avx512    type=fp4 GFLOP/s=   9.845 checksum=0.5132645

@@ -1,0 +1,77 @@
+cmake_minimum_required(VERSION 3.20)
+project(ai_add VERSION 2.0 LANGUAGES C)
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+include(CTest)
+set(CAIRN_OPENMP OFF CACHE BOOL "Small CPU model")
+add_subdirectory(../cairn cairn)
+add_library(add_core STATIC src/add.c src/train.c src/experiment.c src/chat.c src/column.c)
+target_include_directories(add_core PUBLIC include)
+target_link_libraries(add_core PUBLIC cairn)
+add_executable(ai_add src/main.c)
+target_link_libraries(ai_add PRIVATE add_core)
+add_executable(chat_run tools/chat-run.c)
+target_link_libraries(chat_run PRIVATE add_core)
+add_executable(chat_bench tools/chat-bench.c)
+target_link_libraries(chat_bench PRIVATE add_core)
+add_executable(chat_eval tools/chat-eval.c)
+target_link_libraries(chat_eval PRIVATE add_core)
+add_executable(chat_export tools/chat-export.c)
+target_link_libraries(chat_export PRIVATE add_core)
+add_executable(engine_parity tools/engine-parity.c)
+target_link_libraries(engine_parity PRIVATE add_core)
+add_executable(column_eval tools/column-eval.c)
+target_link_libraries(column_eval PRIVATE add_core)
+add_executable(column_export tools/column-export.c)
+target_link_libraries(column_export PRIVATE add_core)
+add_executable(column_quant tools/column-quant.c)
+target_link_libraries(column_quant PRIVATE add_core)
+add_executable(add_tests tests/test.c)
+target_link_libraries(add_tests PRIVATE add_core)
+add_executable(add_session_tests tests/session_test.c)
+target_link_libraries(add_session_tests PRIVATE add_core)
+add_executable(add_experiment_tests tests/experiment_test.c)
+target_link_libraries(add_experiment_tests PRIVATE add_core)
+add_executable(add_chat_tests tests/chat_test.c)
+target_link_libraries(add_chat_tests PRIVATE add_core)
+add_executable(add_column_tests tests/column_test.c)
+target_link_libraries(add_column_tests PRIVATE add_core)
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/web/build/column-v2-export/column-v2-final-fp4.cn")
+  add_test(NAME addition_structured_dialogue COMMAND add_column_tests
+    "${CMAKE_CURRENT_SOURCE_DIR}/web/build/column-v2-export/column-v2-final-fp4.cn")
+endif()
+if(NOT MSVC)
+  target_compile_options(add_core PRIVATE -Wall -Wextra -Wpedantic -O3)
+  target_compile_options(ai_add PRIVATE -Wall -Wextra -Wpedantic)
+  target_compile_options(add_tests PRIVATE -Wall -Wextra -Wpedantic)
+endif()
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/run-final/final-fp4.cn")
+  add_test(NAME addition_fp4_file_certificate COMMAND ai_add certify
+    "${CMAKE_CURRENT_SOURCE_DIR}/run-final/final-fp4.cn"
+    "${CMAKE_CURRENT_BINARY_DIR}/test-certificate-fp4-file.json" keep all)
+  add_test(NAME addition_fp4_max_carry COMMAND ai_add add
+    "${CMAKE_CURRENT_SOURCE_DIR}/run-final/final-fp4.cn" 9999999999 9999999999)
+  set_tests_properties(addition_fp4_max_carry PROPERTIES PASS_REGULAR_EXPRESSION "19999999998")
+  add_test(NAME addition_fp4_packed_storage COMMAND add_tests --fp4-file
+    "${CMAKE_CURRENT_SOURCE_DIR}/run-final/final-fp4.cn")
+endif()
+add_test(NAME addition_unit COMMAND add_tests)
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/run-final/final.cn")
+  add_test(NAME addition_chat_protocol COMMAND add_chat_tests
+    "${CMAKE_CURRENT_SOURCE_DIR}/run-final/final-fp4.cn")
+  add_test(NAME addition_open_experiments COMMAND add_experiment_tests
+    "${CMAKE_CURRENT_SOURCE_DIR}/run-final/final.cn")
+  add_test(NAME addition_incremental_session COMMAND add_session_tests
+    "${CMAKE_CURRENT_SOURCE_DIR}/run-final/final.cn")
+  add_test(NAME addition_certificate COMMAND ai_add certify
+    "${CMAKE_CURRENT_SOURCE_DIR}/run-final/final.cn"
+    "${CMAKE_CURRENT_BINARY_DIR}/test-certificate.json" fp32 all)
+  add_test(NAME addition_fp8_certificate COMMAND ai_add certify
+    "${CMAKE_CURRENT_SOURCE_DIR}/run-final/final.cn"
+    "${CMAKE_CURRENT_BINARY_DIR}/test-certificate-fp8.json" fp8 all)
+  add_test(NAME addition_reject_untrained COMMAND ai_add add
+    "${CMAKE_CURRENT_SOURCE_DIR}/run-final/00-initial.cn" 9 9)
+  add_test(NAME addition_reject_long_input COMMAND ai_add add
+    "${CMAKE_CURRENT_SOURCE_DIR}/run-final/final.cn" 10000000000 1)
+  set_tests_properties(addition_reject_untrained addition_reject_long_input PROPERTIES WILL_FAIL TRUE)
+endif()

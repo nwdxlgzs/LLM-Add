@@ -1,0 +1,5 @@
+build*/
+*.tmp
+/run-*/
+/my-run/
+/web/dist/sha256.json

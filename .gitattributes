@@ -1,0 +1,8 @@
+# Preserve exact artifact bytes across platforms for SHA-256 verification.
+* -text
+*.cn binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.aiadd -diff
+ai-add/web/dist/ai-add.html -diff

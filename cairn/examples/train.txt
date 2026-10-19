@@ -1,0 +1,12 @@
+<|im_start|>user
+What is 1+1?<|im_end|>
+<|im_start|>assistant
+<think>Adding one and one gives two.</think>2<|im_end|><|endoftext|>
+<|im_start|>user
+Say hello.<|im_end|>
+<|im_start|>assistant
+Hello!<|im_end|><|endoftext|>
+<|im_start|>user
+What is 2+2?<|im_end|>
+<|im_start|>assistant
+<think>Adding two and two gives four.</think>4<|im_end|><|endoftext|>

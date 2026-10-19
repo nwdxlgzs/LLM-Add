@@ -1,0 +1,13 @@
+<section class="section" id="data">
+  <div class="section-title"><div><span class="index">01 / DATASETS</span><h2>训练数据，到底长什么样？</h2><p class="sub">选一个训练阶段，再点一条样本。输入、目标输出、原始记录和 token 都在这里。</p></div><span class="pill">默认种子 20261018 · C 训练器真实 token 预览</span></div>
+  <div class="data-toolbar card">
+    <div class="field"><label for="data-stage">查看哪个阶段的数据</label><select id="data-stage"><option value="1">01 · 预训练：复制数字与格式</option><option value="2">02 · SFT：无进位</option><option value="3">03 · SFT：输出进位</option><option value="4" selected>04 · SFT：全部进位状态</option><option value="5">05 · 强化学习：完整算式与 CoT</option><option value="6">06 · QAT：量化后再练</option><option value="7">07 · 自由草稿 RL：只按最终答案</option></select></div>
+    <div class="field" id="data-width-field" hidden><label for="data-width">算式位数</label><select id="data-width"><option value="all">全部难度</option><option value="1">1 位</option><option value="2">2 位</option><option value="4">4 位</option><option value="6">6 位</option><option value="10" selected>10 位</option></select></div>
+    <button class="btn small" id="sample-random">随机看一条 ↗</button><button class="btn small" id="dataset-download">下载本阶段数据 ↓</button>
+    <p class="data-summary" id="data-summary"></p>
+  </div>
+  <div class="dataset-grid">
+    <div class="card sample-browser"><div class="card-top"><h3>样本列表</h3><span class="sub" id="sample-count"></span></div><p class="help" id="data-rule"></p><div class="sample-list" id="sample-list"></div><div class="sample-pagination"><button class="btn small" id="sample-prev">上一页</button><span class="sub" id="sample-page"></span><button class="btn small" id="sample-next">下一页</button></div></div>
+    <article class="card sample-detail" aria-live="polite"><div class="card-top"><h3 id="sample-title"></h3><span class="badge" id="sample-kind"></span></div><p id="sample-purpose" class="help"></p><div class="sample-io"><div><h4>输入给模型</h4><pre id="sample-input"></pre></div><div><h4 id="sample-output-label">训练目标输出</h4><pre id="sample-output"></pre></div></div><p class="help" id="sample-objective"></p><h4>原始数据记录</h4><pre id="sample-record"></pre><h4 id="sample-token-title">完整训练序列 / token ID / 监督位置</h4><pre id="sample-tokens"></pre><p class="help" id="sample-format-note"></p></article>
+  </div>
+</section>
